@@ -1,0 +1,67 @@
+.auth-container {
+	display: flex;
+	width: 100%;
+	height: 100vh;
+	background-color: white;
+	color: black;
+	overflow: hidden;
+	&__image {
+		width: 50%;
+		height: 100vh;
+		align-self: flex-end;
+		background-size: cover;
+
+		@media only screen and (max-width: 850px) {
+			display: none;
+		}
+	}
+
+	&__content {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		width: 50%;
+		height: 100%;
+		@media only screen and (max-width: 850px) {
+			width: 100%;
+		}
+
+		.content {
+			width: 50%;
+		}
+
+		.heading {
+			text-align: center;
+			font-family: "Pacifico", cursive;
+		}
+		p {
+			text-align: center;
+			padding-bottom: 2rem;
+			font-family: "Pacifico", cursive;
+		}
+		.desc {
+			text-align: center;
+			padding-bottom: 2rem;
+		}
+	}
+}
+.form-g {
+	font-size: 1.3rem;
+	margin-bottom: 0.5rem;
+
+	& label {
+		display: block;
+	}
+
+	& input,
+	select {
+		padding: 0.5rem;
+		font-size: inherit;
+		font-family: inherit;
+		margin-top: 0.5rem;
+		width: 100%;
+	}
+	& input:focus {
+		outline: 1px solid #00308f;
+	}
+}
