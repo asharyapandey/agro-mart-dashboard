@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getPrivateFetch } from "../../utils/fetch";
 import { setSnackbar } from "../../redux/slices/snackbar.slice";
 
-export const getCategories = createAsyncThunk(
-	"category/getCategories",
+export const getUnits = createAsyncThunk(
+	"unit/getUnits",
 	async (_, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
 			const response = await privateFetch.get(
-				`/api/v1/category?page=1&limit=10`
+				`/api/v1/unit?page=1&limit=10`
 			);
 			return response.data;
 		} catch (error) {
@@ -26,18 +26,15 @@ export const getCategories = createAsyncThunk(
 	}
 );
 
-export const addNewCategory = createAsyncThunk(
-	"category/addNewCategory",
-	async (newCategory, { rejectWithValue, dispatch, getState }) => {
+export const addUnit = createAsyncThunk(
+	"unit/addUnit",
+	async (unit, { rejectWithValue, dispatch, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.post(
-				"/api/v1/category",
-				{
-					...newCategory,
-				}
-			);
-			const data = categoryResponse.data;
+			const response = await privateFetch.post("/api/v1/unit", {
+				...unit,
+			});
+			const data = response.data;
 			dispatch(
 				setSnackbar({
 					snackbarOpen: true,
@@ -60,50 +57,15 @@ export const addNewCategory = createAsyncThunk(
 	}
 );
 
-export const editCategory = createAsyncThunk(
-	"category/editCategory",
-	async (category, { dispatch, rejectWithValue, getState }) => {
+export const editUnit = createAsyncThunk(
+	"unit/editUnit",
+	async (unit, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.put(
-				`/api/v1/category/${category.id}`,
-				{
-					...category,
-				}
-			);
-			const data = categoryResponse.data;
-			dispatch(
-				setSnackbar({
-					snackbarOpen: true,
-					snackbarType: "success",
-					snackbarMessage: data.message,
-				})
-			);
-			return data;
-		} catch (error) {
-			console.log(error);
-			const responseMessage = error.response.data.message;
-			dispatch(
-				setSnackbar({
-					snackbarOpen: true,
-					snackbarType: "error",
-					snackbarMessage: responseMessage,
-				})
-			);
-			return rejectWithValue(responseMessage);
-		}
-	}
-);
-
-export const deleteCategory = createAsyncThunk(
-	"category/deleteCategory",
-	async (category, { dispatch, rejectWithValue, getState }) => {
-		try {
-			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.delete(
-				`/api/v1/category/${category.id}`
-			);
-			const data = categoryResponse.data;
+			const response = await privateFetch.put(`/api/v1/unit/${unit.id}`, {
+				...unit,
+			});
+			const data = response.data;
 			dispatch(
 				setSnackbar({
 					snackbarOpen: true,
@@ -127,8 +89,40 @@ export const deleteCategory = createAsyncThunk(
 	}
 );
 
-const categorySlice = createSlice({
-	name: "category",
+export const deleteUnit = createAsyncThunk(
+	"unit/deleteUnit",
+	async (unit, { dispatch, rejectWithValue, getState }) => {
+		try {
+			const privateFetch = getPrivateFetch(getState().user.token);
+			const response = await privateFetch.delete(
+				`/api/v1/unit/${unit.id}`
+			);
+			const data = response.data;
+			dispatch(
+				setSnackbar({
+					snackbarOpen: true,
+					snackbarType: "success",
+					snackbarMessage: data.message,
+				})
+			);
+			return data;
+		} catch (error) {
+			console.log(error);
+			const responseMessage = error.response.data.message;
+			dispatch(
+				setSnackbar({
+					snackbarOpen: true,
+					snackbarType: "error",
+					snackbarMessage: responseMessage,
+				})
+			);
+			return rejectWithValue(responseMessage);
+		}
+	}
+);
+
+const unitSlice = createSlice({
+	name: "unit",
 	initialState: {
 		data: [],
 		totalCount: 0,
@@ -140,60 +134,60 @@ const categorySlice = createSlice({
 		message: "",
 	},
 	extraReducers: {
-		[getCategories.pending]: (state, action) => {
+		[getUnits.pending]: (state, action) => {
 			state.status = "LOADING";
 		},
-		[getCategories.fulfilled]: (state, { payload }) => {
+		[getUnits.fulfilled]: (state, { payload }) => {
 			state.data = payload.result;
 			state.totalCount = payload.total;
 			state.page = payload.page;
 			state.status = "SUCCESS";
 		},
-		[getCategories.rejected]: (state, action) => {
+		[getUnits.rejected]: (state, action) => {
 			state.status = "FAILED";
 			console.log(action);
 		},
-		[addNewCategory.pending]: (state, action) => {
+		[addUnit.pending]: (state, action) => {
 			state.addStatus = "LOADING";
 		},
-		[addNewCategory.fulfilled]: (state, { payload }) => {
+		[addUnit.fulfilled]: (state, { payload }) => {
 			state.data = [...state.data, payload.result];
 			state.totalCount += 1;
 			state.addStatus = "SUCCESS";
 		},
-		[addNewCategory.rejected]: (state, action) => {
+		[addUnit.rejected]: (state, action) => {
 			state.addStatus = "FAILED";
 			console.log(action);
 		},
-		[editCategory.pending]: (state, action) => {
+		[editUnit.pending]: (state, action) => {
 			state.editStatus = "LOADING";
 		},
-		[editCategory.fulfilled]: (state, { payload }) => {
+		[editUnit.fulfilled]: (state, { payload }) => {
 			state.data = state.data.map((data) => {
 				if (data._id === payload.result._id) return payload.result;
 				else return data;
 			});
 			state.editStatus = "SUCCESS";
 		},
-		[editCategory.rejected]: (state, action) => {
+		[editUnit.rejected]: (state, action) => {
 			state.editStatus = "FAILED";
 			console.log(action);
 		},
-		[deleteCategory.pending]: (state, action) => {
+		[deleteUnit.pending]: (state, action) => {
 			state.deleteStatus = "LOADING";
 		},
-		[deleteCategory.fulfilled]: (state, { payload }) => {
+		[deleteUnit.fulfilled]: (state, { payload }) => {
 			state.data = state.data.filter((data) => {
 				if (data._id === payload.result._id) return false;
 				else return true;
 			});
 			state.deleteStatus = "SUCCESS";
 		},
-		[deleteCategory.rejected]: (state, action) => {
+		[deleteUnit.rejected]: (state, action) => {
 			state.deleteStatus = "FAILED";
 			console.log(action);
 		},
 	},
 });
 
-export default categorySlice.reducer;
+export default unitSlice.reducer;

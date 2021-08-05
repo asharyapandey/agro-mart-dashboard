@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { CircularProgress } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import YesNoDialog from "../components/Dialogs/YesNoDialog";
+import { deleteUnit, getUnits } from "../redux/slices/unit.slice";
+import AddEditUnitDialog from "../components/Dialogs/AddEditUnitDialog";
 
 const useStyles = makeStyles((theme) => ({
 	fab: {
@@ -35,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Category() {
-	document.title = "Categories";
+function Unit() {
+	document.title = "Unit";
 	const classes = useStyles();
 	// states
 	const [addOpen, setAddOpen] = useState(false);
@@ -46,27 +48,26 @@ function Category() {
 
 	const [editData, setEditData] = useState({
 		_id: "",
-		category: "",
-		slug: "",
-		image: "",
+		unit: "",
+		displayName: "",
 	});
 
 	const dispatch = useDispatch();
 
-	const categories = useSelector((state) => state.category);
+	const unitState = useSelector((state) => state.unit);
 
 	useEffect(() => {
-		dispatch(getCategories());
+		dispatch(getUnits());
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (categories.addStatus === "SUCCESS") {
+		if (unitState.addStatus === "SUCCESS") {
 			setAddOpen(false);
 		}
-		if (categories.editStatus === "SUCCESS") {
+		if (unitState.editStatus === "SUCCESS") {
 			setEditOpen(false);
 		}
-	}, [categories]);
+	}, [unitState]);
 
 	const handleClickOpen = () => {
 		setAddOpen(true);
@@ -74,16 +75,12 @@ function Category() {
 
 	const columns = [
 		{
-			name: "category",
-			label: "Category",
+			name: "unit",
+			label: "Unit",
 		},
 		{
 			name: "displayName",
 			label: "Display Name",
-		},
-		{
-			name: "slug",
-			label: "Slug",
 		},
 		{
 			name: "Actions",
@@ -98,7 +95,7 @@ function Category() {
 								color="primary"
 								onClick={() => {
 									setEditData(
-										categories.data[tableMeta.rowIndex]
+										unitState.data[tableMeta.rowIndex]
 									);
 									setEditOpen(true);
 								}}
@@ -111,7 +108,7 @@ function Category() {
 								className={classes.margin}
 								onClick={() => {
 									setDeleteID(
-										categories.data[tableMeta.rowIndex]._id
+										unitState.data[tableMeta.rowIndex]._id
 									);
 									onDeleteBtnClick();
 								}}
@@ -134,20 +131,20 @@ function Category() {
 	};
 
 	const onYesBtnClick = () => {
-		dispatch(deleteCategory({ id: deleteID }));
+		dispatch(deleteUnit({ id: deleteID }));
 		setDeleteID("");
 		setDeleteConfirmPopup(false);
 	};
 
-	if (categories.status === "LOADING") {
+	if (unitState.status === "LOADING") {
 		return <CircularProgress />;
 	}
 
 	return (
 		<div>
 			<MUIDataTable
-				title={"Categories"}
-				data={categories.data}
+				title={"Units"}
+				data={unitState.data}
 				columns={columns}
 				options={{
 					selectableRows: false,
@@ -162,7 +159,7 @@ function Category() {
 				<AddIcon />
 			</Fab>
 
-			<AddEditCategoryDialog
+			<AddEditUnitDialog
 				open={addOpen}
 				setOpen={setAddOpen}
 				editOpen={false}
@@ -173,11 +170,10 @@ function Category() {
 				onYesBtnClick={onYesBtnClick}
 			/>
 			{editOpen ? (
-				<AddEditCategoryDialog
+				<AddEditUnitDialog
 					open={editOpen}
 					setOpen={setEditOpen}
-					categoryData={editData.category}
-					slugData={editData.slug}
+					unitData={editData.unit}
 					displayNameData={editData.displayName}
 					id={editData._id}
 					editOpen={true}
@@ -189,4 +185,4 @@ function Category() {
 	);
 }
 
-export default Category;
+export default Unit;

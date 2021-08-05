@@ -9,8 +9,6 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import { Switch, Route, Redirect, NavLink } from "react-router-dom";
 import VerifyBooks from "../pages/VerifyBooks";
 import Dashboard from "../pages/Dashboard";
@@ -19,6 +17,11 @@ import HomeIcon from "@material-ui/icons/Home";
 import CategoryIcon from "@material-ui/icons/Category";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import CustomizedSnackbar from "./Snackbar/CustomizedSnackbar";
+import AcUnitIcon from "@material-ui/icons/AcUnit";
+
+import KitchenIcon from "@material-ui/icons/Kitchen";
+import Unit from "../pages/Unit";
+import Product from "../pages/Product";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -53,7 +56,7 @@ export default function DashboardSideBar() {
 			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
 					<Typography variant="h6" noWrap>
-						Accord Dashboard
+						Agro Mart Dashboard
 					</Typography>
 				</Toolbar>
 			</AppBar>
@@ -79,17 +82,6 @@ export default function DashboardSideBar() {
 							</ListItem>
 						</NavLink>
 						<NavLink
-							to="/books"
-							style={{ textDecoration: "none", color: "inherit" }}
-						>
-							<ListItem button>
-								<ListItemIcon>
-									<MenuBookIcon />
-								</ListItemIcon>
-								<ListItemText primary={"Verify Books"} />
-							</ListItem>
-						</NavLink>
-						<NavLink
 							to="/categories"
 							style={{ textDecoration: "none", color: "inherit" }}
 						>
@@ -100,21 +92,42 @@ export default function DashboardSideBar() {
 								<ListItemText primary={"Category"} />
 							</ListItem>
 						</NavLink>
+						<NavLink
+							to="/unit"
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
+							<ListItem button>
+								<ListItemIcon>
+									<AcUnitIcon />
+								</ListItemIcon>
+								<ListItemText primary={"Unit"} />
+							</ListItem>
+						</NavLink>
+						<NavLink
+							to="/product"
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
+							<ListItem button>
+								<ListItemIcon>
+									<KitchenIcon />
+								</ListItemIcon>
+								<ListItemText primary={"Product"} />
+							</ListItem>
+						</NavLink>
 					</List>
 					<Divider />
 					<List>
-						{["Users", "All Books", "Spam"].map((text, index) => (
-							<ListItem button key={text}>
+						<NavLink
+							to="/books"
+							style={{ textDecoration: "none", color: "inherit" }}
+						>
+							<ListItem button>
 								<ListItemIcon>
-									{index % 2 === 0 ? (
-										<InboxIcon />
-									) : (
-										<MailIcon />
-									)}
+									<MenuBookIcon />
 								</ListItemIcon>
-								<ListItemText primary={text} />
+								<ListItemText primary={"Posts"} />
 							</ListItem>
-						))}
+						</NavLink>
 					</List>
 				</div>
 				<CustomizedSnackbar />
@@ -126,6 +139,8 @@ export default function DashboardSideBar() {
 					<Route exact path="/books" component={VerifyBooks} />
 					<Route exact path="/dashboard" component={Dashboard} />
 					<Route exact path="/categories" component={Category} />
+					<Route exact path="/unit" component={Unit} />
+					<Route exact path="/product" component={Product} />
 					<Route path="*" exact>
 						<Redirect to="/dashboard" />
 					</Route>

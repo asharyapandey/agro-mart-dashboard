@@ -8,7 +8,7 @@ import { setToken } from "../redux/slices/user.slice";
 import BASE_URL from "../utils/baseUrl";
 
 function Login() {
-	const [email, setEmail] = useState("");
+	const [phoneNumber, setPhoneNumber] = useState("");
 	const [password, setPassword] = useState("");
 	const [usernameError, setUsernameError] = useState("");
 	const [passwordError, setPasswordError] = useState("");
@@ -17,8 +17,8 @@ function Login() {
 	const dispatch = useDispatch();
 
 	const validate = () => {
-		if (email === "") {
-			setUsernameError("Email is Required");
+		if (phoneNumber === "") {
+			setUsernameError("Phone Number is Required");
 			return false;
 		} else {
 			setUsernameError("");
@@ -35,7 +35,7 @@ function Login() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (validate()) {
-			const data = { email, password };
+			const data = { phoneNumber, password };
 			try {
 				const response = await publicFetch.post(
 					`${BASE_URL}api/v1/admin/login`,
@@ -58,12 +58,12 @@ function Login() {
 					<p>Administrator Dashboard</p>
 					<form onSubmit={handleSubmit}>
 						<div className="form-g">
-							<label htmlFor="username">Email:</label>
+							<label htmlFor="username">Phone Number:</label>
 							<input
 								type="text"
 								id="username"
-								value={email}
-								onChange={(e) => setEmail(e.target.value)}
+								value={phoneNumber}
+								onChange={(e) => setPhoneNumber(e.target.value)}
 							/>
 							<span className="error">{usernameError}</span>
 						</div>

@@ -5,60 +5,50 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
-import slugify from "slugify";
-import Dropzone from "react-dropzone";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useDispatch, useSelector } from "react-redux";
-import {
-	addNewCategory,
-	editCategory,
-} from "../../redux/slices/category.slice";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import categorySchema from "../../validation/category.validation";
 import { Typography } from "@material-ui/core";
 import { capitalizeFirstLetter } from "../../utils/utils";
+import { addUnit, editUnit } from "../../redux/slices/unit.slice";
+import unitSchema from "../../validation/unit.validation";
 
-export default function AddEditCategoryDialog({
+export default function AddEditUnitDialog({
 	open,
 	setOpen,
-	categoryData = "",
-	slugData = "",
+	unitData = "",
 	displayNameData = "",
 	id = "",
 	editOpen = false,
 }) {
-	const [category, setCategory] = useState(categoryData);
-	const [slug, setSlug] = useState(slugData);
+	const [unit, setUnit] = useState(unitData);
 	const [displayName, setDisplayName] = useState(displayNameData);
-	const [categoryError, setCategoryError] = useState("");
-	const [slugError, setSlugError] = useState("");
+	const [unitError, setUnitError] = useState("");
 	const [displayNameError, setDisplayNameError] = useState("");
 	const handleClose = () => {
 		setOpen(false);
 	};
 
-	const handleCategoryChange = (e) => {
-		setCategory(e.target.value);
-		const slugifiedCategory = slugify(e.target.value, { lower: true });
-		setSlug(slugifiedCategory);
+	const handleUnitChange = (e) => {
+		setUnit(e.target.value);
 	};
 	const dispatch = useDispatch();
-	const categoryState = useSelector((state) => state.category);
+	const unitState = useSelector((state) => state.unit);
 
 	const handleSubmit = async () => {
-		const categoryData = { category, slug, displayName };
-		categorySchema
-			.validate(categoryData)
+		const unitData = { unit, displayName };
+		unitSchema
+			.validate(unitData)
 			.then((isValid) => {
 				if (editOpen) {
 					dispatch(
-						editCategory({
-							...categoryData,
+						editUnit({
+							...unitData,
 							id,
 						})
 					);
 				} else {
-					dispatch(addNewCategory(categoryData));
+					dispatch(addUnit(unitData));
 				}
 			})
 			.catch((err) => {
@@ -66,11 +56,8 @@ export default function AddEditCategoryDialog({
 					if (error.includes("displayName")) {
 						setDisplayName(capitalizeFirstLetter(error));
 					}
-					if (error.includes("category")) {
-						setCategoryError(capitalizeFirstLetter(error));
-					}
-					if (error.includes("slug")) {
-						setSlugError(capitalizeFirstLetter(error));
+					if (error.includes("unit")) {
+						setUnitError(capitalizeFirstLetter(error));
 					}
 				});
 			});
@@ -85,32 +72,21 @@ export default function AddEditCategoryDialog({
 				fullWidth={true}
 				maxWidth={"sm"}
 			>
-				<DialogTitle id="form-dialog-title">Category</DialogTitle>
+				<DialogTitle id="form-dialog-title">Unit</DialogTitle>
 				<DialogContent>
 					<TextField
 						autoFocus
 						margin="dense"
-						id="category"
-						label="Category"
+						id="unit"
+						label="Unit"
 						type="text"
 						variant="outlined"
 						fullWidth
-						value={category}
-						onChange={handleCategoryChange}
-						error={categoryError !== ""}
-						onKeyDown={() => setCategoryError("")}
-						helperText={categoryError}
-					/>
-					<TextField
-						margin="dense"
-						id="slug"
-						label="Slug"
-						type="text"
-						variant="outlined"
-						value={slug}
-						fullWidth
-						error={slugError !== ""}
-						helperText={slugError}
+						value={unit}
+						onChange={handleUnitChange}
+						error={unitError !== ""}
+						onKeyDown={() => setUnitError("")}
+						helperText={unitError}
 					/>
 					<TextField
 						margin="dense"
@@ -129,15 +105,15 @@ export default function AddEditCategoryDialog({
 				<DialogActions>
 					<Button onClick={handleSubmit} color="primary">
 						{editOpen ? (
-							categoryState.editStatus === "" ||
-							categoryState.editStatus === "SUCCESS" ? (
-								"Edit Category"
+							unitState.editStatus === "" ||
+							unitState.editStatus === "SUCCESS" ? (
+								"Edit Unit"
 							) : (
 								<CircularProgress size={17} />
 							)
-						) : categoryState.addStatus === "" ||
-						  categoryState.addStatus === "SUCCESS" ? (
-							"Add Category"
+						) : unitState.addStatus === "" ||
+						  unitState.addStatus === "SUCCESS" ? (
+							"Add Unit"
 						) : (
 							<CircularProgress size={17} />
 						)}

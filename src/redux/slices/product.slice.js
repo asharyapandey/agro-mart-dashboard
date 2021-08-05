@@ -2,13 +2,13 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { getPrivateFetch } from "../../utils/fetch";
 import { setSnackbar } from "../../redux/slices/snackbar.slice";
 
-export const getCategories = createAsyncThunk(
-	"category/getCategories",
+export const getProducts = createAsyncThunk(
+	"products/getProducts",
 	async (_, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
 			const response = await privateFetch.get(
-				`/api/v1/category?page=1&limit=10`
+				`/api/v1/products?page=1&limit=10`
 			);
 			return response.data;
 		} catch (error) {
@@ -26,18 +26,15 @@ export const getCategories = createAsyncThunk(
 	}
 );
 
-export const addNewCategory = createAsyncThunk(
-	"category/addNewCategory",
-	async (newCategory, { rejectWithValue, dispatch, getState }) => {
+export const addNewProduct = createAsyncThunk(
+	"product/addNewProduct",
+	async (product, { rejectWithValue, dispatch, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.post(
-				"/api/v1/category",
-				{
-					...newCategory,
-				}
-			);
-			const data = categoryResponse.data;
+			const response = await privateFetch.post("/api/v1/product", {
+				...product,
+			});
+			const data = response.data;
 			dispatch(
 				setSnackbar({
 					snackbarOpen: true,
@@ -60,18 +57,18 @@ export const addNewCategory = createAsyncThunk(
 	}
 );
 
-export const editCategory = createAsyncThunk(
-	"category/editCategory",
-	async (category, { dispatch, rejectWithValue, getState }) => {
+export const editProduct = createAsyncThunk(
+	"product/editProduct",
+	async (product, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.put(
-				`/api/v1/category/${category.id}`,
+			const response = await privateFetch.put(
+				`/api/v1/product/${product.id}`,
 				{
-					...category,
+					...product,
 				}
 			);
-			const data = categoryResponse.data;
+			const data = response.data;
 			dispatch(
 				setSnackbar({
 					snackbarOpen: true,
@@ -95,15 +92,15 @@ export const editCategory = createAsyncThunk(
 	}
 );
 
-export const deleteCategory = createAsyncThunk(
-	"category/deleteCategory",
-	async (category, { dispatch, rejectWithValue, getState }) => {
+export const deleteProduct = createAsyncThunk(
+	"product/deleteProduct",
+	async (product, { dispatch, rejectWithValue, getState }) => {
 		try {
 			const privateFetch = getPrivateFetch(getState().user.token);
-			const categoryResponse = await privateFetch.delete(
-				`/api/v1/category/${category.id}`
+			const response = await privateFetch.delete(
+				`/api/v1/product/${product.id}`
 			);
-			const data = categoryResponse.data;
+			const data = response.data;
 			dispatch(
 				setSnackbar({
 					snackbarOpen: true,
@@ -127,8 +124,8 @@ export const deleteCategory = createAsyncThunk(
 	}
 );
 
-const categorySlice = createSlice({
-	name: "category",
+const productSlice = createSlice({
+	name: "product",
 	initialState: {
 		data: [],
 		totalCount: 0,
@@ -140,60 +137,60 @@ const categorySlice = createSlice({
 		message: "",
 	},
 	extraReducers: {
-		[getCategories.pending]: (state, action) => {
+		[getProducts.pending]: (state, action) => {
 			state.status = "LOADING";
 		},
-		[getCategories.fulfilled]: (state, { payload }) => {
+		[getProducts.fulfilled]: (state, { payload }) => {
 			state.data = payload.result;
 			state.totalCount = payload.total;
 			state.page = payload.page;
 			state.status = "SUCCESS";
 		},
-		[getCategories.rejected]: (state, action) => {
+		[getProducts.rejected]: (state, action) => {
 			state.status = "FAILED";
 			console.log(action);
 		},
-		[addNewCategory.pending]: (state, action) => {
+		[addNewProduct.pending]: (state, action) => {
 			state.addStatus = "LOADING";
 		},
-		[addNewCategory.fulfilled]: (state, { payload }) => {
+		[addNewProduct.fulfilled]: (state, { payload }) => {
 			state.data = [...state.data, payload.result];
 			state.totalCount += 1;
 			state.addStatus = "SUCCESS";
 		},
-		[addNewCategory.rejected]: (state, action) => {
+		[addNewProduct.rejected]: (state, action) => {
 			state.addStatus = "FAILED";
 			console.log(action);
 		},
-		[editCategory.pending]: (state, action) => {
+		[editProduct.pending]: (state, action) => {
 			state.editStatus = "LOADING";
 		},
-		[editCategory.fulfilled]: (state, { payload }) => {
+		[editProduct.fulfilled]: (state, { payload }) => {
 			state.data = state.data.map((data) => {
 				if (data._id === payload.result._id) return payload.result;
 				else return data;
 			});
 			state.editStatus = "SUCCESS";
 		},
-		[editCategory.rejected]: (state, action) => {
+		[editProduct.rejected]: (state, action) => {
 			state.editStatus = "FAILED";
 			console.log(action);
 		},
-		[deleteCategory.pending]: (state, action) => {
+		[deleteProduct.pending]: (state, action) => {
 			state.deleteStatus = "LOADING";
 		},
-		[deleteCategory.fulfilled]: (state, { payload }) => {
+		[deleteProduct.fulfilled]: (state, { payload }) => {
 			state.data = state.data.filter((data) => {
 				if (data._id === payload.result._id) return false;
 				else return true;
 			});
 			state.deleteStatus = "SUCCESS";
 		},
-		[deleteCategory.rejected]: (state, action) => {
+		[deleteProduct.rejected]: (state, action) => {
 			state.deleteStatus = "FAILED";
 			console.log(action);
 		},
 	},
 });
 
-export default categorySlice.reducer;
+export default productSlice.reducer;

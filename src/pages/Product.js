@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { CircularProgress } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import YesNoDialog from "../components/Dialogs/YesNoDialog";
+import { getProducts } from "../redux/slices/product.slice";
+import AddEditProductDialog from "../components/Dialogs/AddEditProductDialog";
 
 const useStyles = makeStyles((theme) => ({
 	fab: {
@@ -35,8 +37,8 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Category() {
-	document.title = "Categories";
+function Product() {
+	document.title = "Products";
 	const classes = useStyles();
 	// states
 	const [addOpen, setAddOpen] = useState(false);
@@ -46,27 +48,29 @@ function Category() {
 
 	const [editData, setEditData] = useState({
 		_id: "",
-		category: "",
+		kalimatiPrice: "",
 		slug: "",
-		image: "",
+		productName: "",
+		unit: "",
+		category: "",
 	});
 
 	const dispatch = useDispatch();
 
-	const categories = useSelector((state) => state.category);
+	const products = useSelector((state) => state.product);
 
 	useEffect(() => {
-		dispatch(getCategories());
+		dispatch(getProducts());
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (categories.addStatus === "SUCCESS") {
+		if (products.addStatus === "SUCCESS") {
 			setAddOpen(false);
 		}
-		if (categories.editStatus === "SUCCESS") {
+		if (products.editStatus === "SUCCESS") {
 			setEditOpen(false);
 		}
-	}, [categories]);
+	}, [products]);
 
 	const handleClickOpen = () => {
 		setAddOpen(true);
@@ -74,16 +78,34 @@ function Category() {
 
 	const columns = [
 		{
-			name: "category",
-			label: "Category",
-		},
-		{
-			name: "displayName",
-			label: "Display Name",
+			name: "productName",
+			label: "Name",
 		},
 		{
 			name: "slug",
 			label: "Slug",
+		},
+		{
+			name: "kalimatiPrice",
+			label: "Kalimati Price",
+		},
+		{
+			name: "category",
+			label: "Category",
+			options: {
+				customBodyRender: (value, tableMeta, updateValue) => {
+					return <div>{value.displayName}</div>;
+				},
+			},
+		},
+		{
+			name: "unit",
+			label: "Unit",
+			options: {
+				customBodyRender: (value, tableMeta, updateValue) => {
+					return <div>{value.displayName}</div>;
+				},
+			},
 		},
 		{
 			name: "Actions",
@@ -98,7 +120,7 @@ function Category() {
 								color="primary"
 								onClick={() => {
 									setEditData(
-										categories.data[tableMeta.rowIndex]
+										products.data[tableMeta.rowIndex]
 									);
 									setEditOpen(true);
 								}}
@@ -111,7 +133,7 @@ function Category() {
 								className={classes.margin}
 								onClick={() => {
 									setDeleteID(
-										categories.data[tableMeta.rowIndex]._id
+										products.data[tableMeta.rowIndex]._id
 									);
 									onDeleteBtnClick();
 								}}
@@ -139,7 +161,7 @@ function Category() {
 		setDeleteConfirmPopup(false);
 	};
 
-	if (categories.status === "LOADING") {
+	if (products.status === "LOADING") {
 		return <CircularProgress />;
 	}
 
@@ -147,7 +169,7 @@ function Category() {
 		<div>
 			<MUIDataTable
 				title={"Categories"}
-				data={categories.data}
+				data={products.data}
 				columns={columns}
 				options={{
 					selectableRows: false,
@@ -162,7 +184,7 @@ function Category() {
 				<AddIcon />
 			</Fab>
 
-			<AddEditCategoryDialog
+			<AddEditProductDialog
 				open={addOpen}
 				setOpen={setAddOpen}
 				editOpen={false}
@@ -173,12 +195,14 @@ function Category() {
 				onYesBtnClick={onYesBtnClick}
 			/>
 			{editOpen ? (
-				<AddEditCategoryDialog
+				<AddEditProductDialog
 					open={editOpen}
 					setOpen={setEditOpen}
-					categoryData={editData.category}
+					productNameData={editData.productName}
 					slugData={editData.slug}
-					displayNameData={editData.displayName}
+					kalimatiPriceData={editData.kalimatiPrice}
+					categoryData={editData.category._id}
+					unitData={editData.unit._id}
 					id={editData._id}
 					editOpen={true}
 				/>
@@ -189,4 +213,4 @@ function Category() {
 	);
 }
 
-export default Category;
+export default Product;
