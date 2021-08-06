@@ -18,10 +18,17 @@ import CategoryIcon from "@material-ui/icons/Category";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import CustomizedSnackbar from "./Snackbar/CustomizedSnackbar";
 import AcUnitIcon from "@material-ui/icons/AcUnit";
-
+import { useState } from "react";
 import KitchenIcon from "@material-ui/icons/Kitchen";
 import Unit from "../pages/Unit";
 import Product from "../pages/Product";
+import { Menu } from "@material-ui/core";
+import { MenuItem } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
+import { AccountCircle } from "@material-ui/icons";
+import { Grid } from "@material-ui/core";
+import { useDispatch } from "react-redux";
+import { removeToken } from "../redux/slices/user.slice";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -49,15 +56,59 @@ const useStyles = makeStyles((theme) => ({
 
 export default function DashboardSideBar() {
 	const classes = useStyles();
+	const [anchorEl, setAnchorEl] = useState(null);
+	const open = Boolean(anchorEl);
+	const dispatch = useDispatch();
+	const handleMenu = (event) => {
+		setAnchorEl(event.currentTarget);
+	};
 
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
 			<AppBar position="fixed" className={classes.appBar}>
 				<Toolbar>
-					<Typography variant="h6" noWrap>
-						Agro Mart Dashboard
-					</Typography>
+					<Grid container>
+						<Grid item sm={11}>
+							<Typography variant="h6" noWrap>
+								Agro Mart Dashboard
+							</Typography>
+						</Grid>
+					</Grid>
+					<div>
+						<IconButton
+							aria-label="account of current user"
+							aria-controls="menu-appbar"
+							aria-haspopup="true"
+							onClick={handleMenu}
+							color="inherit"
+						>
+							<AccountCircle />
+						</IconButton>
+						<Menu
+							id="menu-appbar"
+							anchorEl={anchorEl}
+							anchorOrigin={{
+								vertical: "top",
+								horizontal: "right",
+							}}
+							keepMounted
+							transformOrigin={{
+								vertical: "top",
+								horizontal: "right",
+							}}
+							open={open}
+							onClose={handleClose}
+						>
+							<MenuItem onClick={handleClose}>Profile</MenuItem>
+							<MenuItem onClick={() => dispatch(removeToken())}>
+								Log Out
+							</MenuItem>
+						</Menu>
+					</div>
 				</Toolbar>
 			</AppBar>
 			<Drawer

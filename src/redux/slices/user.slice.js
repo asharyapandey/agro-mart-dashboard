@@ -8,6 +8,7 @@ const userSlice = createSlice({
 			return { ...state, token: action.payload };
 		},
 		removeToken: (state, action) => {
+			localStorage.removeItem("token");
 			return { ...state, token: "" };
 		},
 	},
