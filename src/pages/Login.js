@@ -54,7 +54,7 @@ function Login() {
 		<div className="auth-container">
 			<div className="auth-container__content">
 				<div className="content">
-					<h1 className="heading">Accord</h1>
+					<h1 className="heading">Agro Mart</h1>
 					<p>Administrator Dashboard</p>
 					<form onSubmit={handleSubmit}>
 						<div className="form-g">

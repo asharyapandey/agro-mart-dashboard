@@ -11,8 +11,9 @@ import { useEffect } from "react";
 import { CircularProgress } from "@material-ui/core";
 import { Button } from "@material-ui/core";
 import YesNoDialog from "../components/Dialogs/YesNoDialog";
-import { getProducts } from "../redux/slices/product.slice";
+import { deleteProduct, getProducts } from "../redux/slices/product.slice";
 import AddEditProductDialog from "../components/Dialogs/AddEditProductDialog";
+import { getUnits } from "../redux/slices/unit.slice";
 
 const useStyles = makeStyles((theme) => ({
 	fab: {
@@ -61,6 +62,8 @@ function Product() {
 
 	useEffect(() => {
 		dispatch(getProducts());
+		dispatch(getUnits());
+		dispatch(getCategories());
 	}, [dispatch]);
 
 	useEffect(() => {
@@ -156,7 +159,7 @@ function Product() {
 	};
 
 	const onYesBtnClick = () => {
-		dispatch(deleteCategory({ id: deleteID }));
+		dispatch(deleteProduct({ id: deleteID }));
 		setDeleteID("");
 		setDeleteConfirmPopup(false);
 	};

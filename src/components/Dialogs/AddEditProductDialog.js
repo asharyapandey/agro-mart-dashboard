@@ -45,7 +45,7 @@ export default function AddEditProductDialog({
 	};
 
 	const handleProductNameChange = (e) => {
-		setUnit(e.target.value);
+		setProductName(e.target.value);
 		const slugifiedCategory = slugify(e.target.value, { lower: true });
 		setSlug(slugifiedCategory);
 	};
@@ -135,7 +135,9 @@ export default function AddEditProductDialog({
 						variant="outlined"
 						value={kalimatiPrice}
 						fullWidth
-						error={kalimatiPrice !== ""}
+						onChange={(e) => setKalimatiPrice(e.target.value)}
+						onKeyDown={(e) => setKalimatiPriceError("")}
+						error={kalimatiPriceError !== ""}
 						helperText={kalimatiPriceError}
 					/>
 					<FormControl variant="outlined" fullWidth margin="dense">
