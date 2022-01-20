@@ -1,5 +1,5 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import bookSlice from "./slices/book.slice";
+import postSlice from "./slices/post.slice";
 import categorySlice from "./slices/category.slice";
 import productSlice from "./slices/product.slice";
 import snackbarSlice from "./slices/snackbar.slice";
@@ -10,7 +10,7 @@ const reducer = combineReducers({
 	user: userSlice,
 	category: categorySlice,
 	snackbar: snackbarSlice,
-	book: bookSlice,
+	post: postSlice,
 	unit: unitSlice,
 	product: productSlice,
 });

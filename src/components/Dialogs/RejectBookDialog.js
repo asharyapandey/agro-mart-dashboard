@@ -7,7 +7,7 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { rejectBooks } from "../../redux/slices/book.slice";
+import { rejectBooks } from "../../redux/slices/post.slice";
 
 function RejectBookDialog({ rejectConfirmDialog, onCancelBtnClick, bookID }) {
 	const [rejectionMessage, setRejectionMessage] = useState("");

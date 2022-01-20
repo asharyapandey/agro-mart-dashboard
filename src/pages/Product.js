@@ -97,6 +97,7 @@ function Product() {
 			label: "Category",
 			options: {
 				customBodyRender: (value, tableMeta, updateValue) => {
+					console.log(value);
 					return <div>{value.displayName}</div>;
 				},
 			},

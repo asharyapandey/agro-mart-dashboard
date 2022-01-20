@@ -8,7 +8,7 @@ function Dashboard() {
 	return (
 		<div>
 			<Typography variant="p" paragraph>
-				This is the Dashboard Here, is your token: {user.token}
+				Welcome to the Dashboard.
 			</Typography>
 		</div>
 	);

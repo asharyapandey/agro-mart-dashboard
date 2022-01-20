@@ -10,7 +10,6 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { Switch, Route, Redirect, NavLink } from "react-router-dom";
-import VerifyBooks from "../pages/VerifyBooks";
 import Dashboard from "../pages/Dashboard";
 import Category from "../pages/Category";
 import HomeIcon from "@material-ui/icons/Home";
@@ -29,6 +28,7 @@ import { AccountCircle } from "@material-ui/icons";
 import { Grid } from "@material-ui/core";
 import { useDispatch } from "react-redux";
 import { removeToken } from "../redux/slices/user.slice";
+import Posts from "../pages/Posts";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -187,7 +187,7 @@ export default function DashboardSideBar() {
 				<Toolbar />
 
 				<Switch>
-					<Route exact path="/books" component={VerifyBooks} />
+					<Route exact path="/books" component={Posts} />
 					<Route exact path="/dashboard" component={Dashboard} />
 					<Route exact path="/categories" component={Category} />
 					<Route exact path="/unit" component={Unit} />
